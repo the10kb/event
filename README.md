@@ -2,7 +2,7 @@
 
 Install
 -------
-`npm install 10kb/boilerplate`
+`npm install 10kb/event`
 
 Purposes
 --------
