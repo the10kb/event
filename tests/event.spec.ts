@@ -78,7 +78,7 @@ describe("event.dispatcher", () => {
             counter++;
         });
 
-        ed.off(cb);
+        ed.off(undefined, cb);
 
         ed.emit( "test" );
         expect(counter).toBe(1);
