@@ -17,7 +17,8 @@
             "allow-undefined-check"
         ],
 
-        "no-shadowed-variable": false
+        "no-shadowed-variable": false,
+        "interface-name": false
     },
     "rulesDirectory": []
 }

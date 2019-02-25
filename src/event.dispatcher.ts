@@ -1,37 +1,48 @@
-import {Event} from "./event";
-
+export interface Event { name: string; }
 export type EventType = string | Event;
-export type EventDispatcherCallback<E extends EventType> = ( $e:E, ...args )=>void;
+export type EventDispatcherCallback<E extends EventType> = ( $e: Event, ...args ) => void;
 
-type EventDispatcherHandler<E extends EventType> = {
-    cb   : EventDispatcherCallback<E>;
-    once : boolean;
-    ctx  : any;
+interface EventDispatcherHandler<E extends EventType> {
+    cb: EventDispatcherCallback<E>;
+    once: boolean;
+    ctx: any;
 }
 
-type EventDispatcherRegistry<E extends EventType> = {
-    [ name : string ] : EventDispatcherHandler<E>[]
+interface EventDispatcherRegistry<E extends EventType> {
+    [ name: string ]: Array<EventDispatcherHandler<E>>;
 }
 
-export class EventDispatcher<E extends EventType = string>{
+export class EventDispatcher<E extends EventType = Event> {
     private handlers: EventDispatcherRegistry<E> = {};
 
-    emit(event : E, ...args) : this{
+    public emit(event: E, ...args): this {
+        const e = ( typeof event == "string" ? { name : event as string } : event ) as Event;
+
+        const forRemove = [];
+
+        this.handlers[e.name].forEach((h) => {
+            h.cb.call(h.ctx, e, ...args);
+            if ( h.once ) { forRemove.push(h); }
+        });
+
+        this.handlers[e.name] = this.handlers[e.name].filter((h) => forRemove.indexOf(h) == -1);
 
         return this;
     }
 
-    on(name : string, cb : EventDispatcherCallback<E>, ctx ?: any) : this {
-
+    public on(name: string, cb: EventDispatcherCallback<E>, ctx ?: any): this {
+        this.handlers[name] = this.handlers[name] || [];
+        this.handlers[name].push({ cb, ctx : ctx || window, once : false });
         return this;
     }
 
-    once(name : string, cb : EventDispatcherCallback<E>, ctx ?: any) : this {
-
+    public once(name: string, cb: EventDispatcherCallback<E>, ctx ?: any): this {
+        this.handlers[name] = this.handlers[name] || [];
+        this.handlers[name].push({ cb, ctx : ctx || window, once : true });
         return this;
     }
 
-    off(selector : string | Function | any) : this {
+    public off(name: string, cb: EventDispatcherCallback<E>, ctx ?: any): this {
 
         return this;
     }

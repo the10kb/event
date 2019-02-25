@@ -1,2 +1,1 @@
-// exports...
-export const NAME = "boilerplate";
+export * from "./event.dispatcher";
