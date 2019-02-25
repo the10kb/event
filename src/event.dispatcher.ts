@@ -43,29 +43,29 @@ export class EventDispatcher<E extends EventType = Event> {
     }
 
     public off(name?: string, cb?: EventDispatcherCallback<E>, ctx ?: any): this {
-        if( name ) {
-            if( !cb && !ctx ){
+        if ( name ) {
+            if ( !cb && !ctx ) {
                 this.handlers[name] = [];
-            } else if( cb && !ctx ){
-                this.handlers[name] = this.handlers[name].filter((h)=>h.cb !== cb);
-            } else if( !cb && ctx ){
-                this.handlers[name] = this.handlers[name].filter((h)=>h.ctx !== ctx);
-            } else if( cb && ctx ){
-                this.handlers[name] = this.handlers[name].filter((h)=>h.ctx !== ctx && h.cb !== cb);
+            } else if ( cb && !ctx ) {
+                this.handlers[name] = this.handlers[name].filter((h) => h.cb !== cb);
+            } else if ( !cb && ctx ) {
+                this.handlers[name] = this.handlers[name].filter((h) => h.ctx !== ctx);
+            } else if ( cb && ctx ) {
+                this.handlers[name] = this.handlers[name].filter((h) => h.ctx !== ctx && h.cb !== cb);
             }
-        } else if( cb ){
-            if( ctx ){
-                Object.keys(this.handlers).forEach((name)=>{
-                    this.handlers[name] = this.handlers[name].filter((h)=>h.ctx !== ctx && h.cb !== cb);
+        } else if ( cb ) {
+            if ( ctx ) {
+                Object.keys(this.handlers).forEach((name) => {
+                    this.handlers[name] = this.handlers[name].filter((h) => h.ctx !== ctx && h.cb !== cb);
                 });
             } else {
-                Object.keys(this.handlers).forEach((name)=>{
-                    this.handlers[name] = this.handlers[name].filter((h)=>h.cb !== cb);
+                Object.keys(this.handlers).forEach((name) => {
+                    this.handlers[name] = this.handlers[name].filter((h) => h.cb !== cb);
                 });
             }
-        } else if( ctx ){
-            Object.keys(this.handlers).forEach((name)=>{
-                this.handlers[name] = this.handlers[name].filter((h)=>h.ctx !== ctx);
+        } else if ( ctx ) {
+            Object.keys(this.handlers).forEach((name) => {
+                this.handlers[name] = this.handlers[name].filter((h) => h.ctx !== ctx);
             });
         } else {
             this.handlers = {};
